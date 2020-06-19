@@ -11,7 +11,10 @@ class ThemeChanger extends ChangeNotifier {
     appBarTheme: AppBarTheme(color: Color(0xffD84797)),
     hintColor: Color(0xff8983CB),
     textTheme: TextTheme(
-      headline1: TextStyle(color: Colors.white, fontSize: 25), //headers
+      headline1: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.bold), //headers
       subtitle1: TextStyle(
           color: Color(0xff8983CB),
           fontSize: 16,

@@ -1,18 +1,23 @@
 import 'package:chatchat/logic/themeChanger.dart';
-import 'package:chatchat/screens/login.dart';
-import 'package:chatchat/screens/register.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Start extends StatelessWidget {
-  static String id = "start";
+class Login extends StatelessWidget {
+  static String id = "login";
 
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Login",
+          style: _theme.getThemeData().textTheme.headline1,
+          textAlign: TextAlign.center,
+        ),
+      ),
       backgroundColor: _theme.getCurrentColor(),
       body: SafeArea(
         child: Column(
@@ -28,15 +33,7 @@ class Start extends StatelessWidget {
             ),
             StyledButton(
               text: "Login",
-              function: () {
-                Navigator.pushNamed(context, Login.id);
-              },
-            ),
-            StyledButton(
-              text: "Register",
-              function: () {
-                Navigator.pushNamed(context, Register.id);
-              },
+              function: () {},
             ),
           ],
         ),

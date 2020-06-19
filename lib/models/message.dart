@@ -1,6 +1,6 @@
 class Message {
   final String text;
   final DateTime dateTime;
-  final String Token;
-  Message({this.text, this.dateTime, this.Token});
+  final String token;
+  Message({this.text, this.dateTime, this.token});
 }

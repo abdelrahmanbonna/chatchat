@@ -1,12 +1,10 @@
 import 'package:chatchat/logic/themeChanger.dart';
-import 'package:chatchat/screens/login.dart';
-import 'package:chatchat/screens/register.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Start extends StatelessWidget {
-  static String id = "start";
+class Register extends StatelessWidget {
+  static String id = "register";
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +12,13 @@ class Start extends StatelessWidget {
     var _theme = Provider.of<ThemeChanger>(context);
     return Scaffold(
       backgroundColor: _theme.getCurrentColor(),
+      appBar: AppBar(
+        title: Text(
+          "Register",
+          style: _theme.getThemeData().textTheme.headline1,
+          textAlign: TextAlign.center,
+        ),
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,21 +27,16 @@ class Start extends StatelessWidget {
             SizedBox(
               width: screen.width,
             ),
-            Image.asset("assets/Logo.png"),
+            CircleAvatar(
+              backgroundColor: Colors.grey,
+              minRadius: 110,
+            ),
             SizedBox(
               height: screen.height * 0.15,
             ),
             StyledButton(
-              text: "Login",
-              function: () {
-                Navigator.pushNamed(context, Login.id);
-              },
-            ),
-            StyledButton(
               text: "Register",
-              function: () {
-                Navigator.pushNamed(context, Register.id);
-              },
+              function: () {},
             ),
           ],
         ),
