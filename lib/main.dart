@@ -1,6 +1,8 @@
 import 'package:chatchat/screens/about.dart';
+import 'package:chatchat/screens/chat.dart';
 import 'package:chatchat/screens/home.dart';
 import 'package:chatchat/screens/login.dart';
+import 'package:chatchat/screens/newChat.dart';
 import 'package:chatchat/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,8 @@ class MaterialAppWithTheme extends StatelessWidget {
         Register.id: (context) => Register(),
         Home.id: (context) => Home(),
         About.id: (context) => About(),
+        Chat.id: (context) => Chat(),
+        NewChat.id: (context) => NewChat(),
       },
       initialRoute: Start.id,
       theme: _theme.getThemeData(),

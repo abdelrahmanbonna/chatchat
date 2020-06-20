@@ -35,9 +35,10 @@ class ThemeChanger extends ChangeNotifier {
   );
 
   Color _currentColor;
+  bool _switchvalue = false;
 
   ThemeChanger() {
-    setCurrentColor("light");
+    setCurrentColor();
   }
 
   ThemeData getThemeData() => _themeData;
@@ -48,10 +49,16 @@ class ThemeChanger extends ChangeNotifier {
     notifyListeners();
   }
 
-  setCurrentColor(String mode) {
-    mode == "dark"
+  setCurrentColor() {
+    _switchvalue
         ? _currentColor = _themeData.primaryColorDark
         : _currentColor = _themeData.primaryColorLight;
+    notifyListeners();
+  }
+
+  getSwitch() => _switchvalue;
+  setSwitch(bool mode) {
+    _switchvalue = mode;
     notifyListeners();
   }
 }

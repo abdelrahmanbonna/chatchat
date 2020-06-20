@@ -1,9 +1,12 @@
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/screens/about.dart';
+import 'package:chatchat/screens/newChat.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'start.dart';
 
 class Home extends StatefulWidget {
   static String id = "home";
@@ -14,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int barIndex = 1;
+  bool switchval = false;
 
   Widget screensChanger(BuildContext context, int index) {
     var screen = MediaQuery.of(context).size;
@@ -34,6 +38,24 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
           ),
         ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 70),
+          child: Column(
+            children: [
+              SizedBox(
+                width: screen.width,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.grey,
+                minRadius: 110,
+              ),
+              SizedBox(
+                width: screen.width,
+                height: screen.height * 0.05,
+              ),
+            ],
+          ),
+        ),
       );
 
       //here for the second one
@@ -41,6 +63,16 @@ class _HomeState extends State<Home> {
       return Scaffold(
         backgroundColor: _theme.getCurrentColor(),
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(
+                  ChatChat.plus,
+                  color: _theme.getCurrentColor(),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, NewChat.id);
+                })
+          ],
           title: Text(
             "Home",
             style: _theme
@@ -51,6 +83,7 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
           ),
         ),
+        body: Container(),
       );
 
       //here for the last one
@@ -70,14 +103,40 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 90),
+            padding: EdgeInsets.symmetric(vertical: 120),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   color: Colors.transparent,
-                  child: Row(),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Dark Mode",
+                        style: _theme.getThemeData().textTheme.button.merge(
+                            TextStyle(color: _theme.getThemeData().hintColor)),
+                      ),
+                      SizedBox(
+                        width: screen.width * 0.1,
+                      ),
+                      Switch(
+                        value: _theme.getSwitch(),
+                        inactiveThumbColor: _theme.getThemeData().hintColor,
+                        activeColor: _theme.getThemeData().hintColor,
+                        activeTrackColor: _theme.getThemeData().hintColor,
+                        onChanged: (value) {
+                          _theme.setSwitch(value);
+                          _theme.setCurrentColor();
+                        },
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                ),
+                SizedBox(
+                  height: screen.height * 0.1,
                 ),
                 StyledButton(
                   text: "About",
@@ -87,7 +146,10 @@ class _HomeState extends State<Home> {
                 ),
                 StyledButton(
                   text: "Logout",
-                  function: () {},
+                  function: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Start.id, (route) => false);
+                  },
                 ),
               ],
             ),
