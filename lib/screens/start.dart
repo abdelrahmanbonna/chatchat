@@ -22,7 +22,7 @@ class Start extends StatelessWidget {
             SizedBox(
               width: screen.width,
             ),
-            Image.asset("assets/Logo.png"),
+            Hero(tag: "logo", child: Image.asset("assets/Logo.png")),
             SizedBox(
               height: screen.height * 0.15,
             ),

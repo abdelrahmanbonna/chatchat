@@ -1,5 +1,7 @@
 import 'package:chatchat/logic/themeChanger.dart';
+import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
+import 'package:chatchat/utilities/styledButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +22,15 @@ class _HomeState extends State<Home> {
     // if first option of the bar has been clicked
     if (index == 0) {
       return Scaffold(
+        backgroundColor: _theme.getCurrentColor(),
         appBar: AppBar(
           title: Text(
             "Profile",
-            style: _theme.getThemeData().textTheme.headline1,
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getCurrentColor())),
             textAlign: TextAlign.center,
           ),
         ),
@@ -32,10 +39,15 @@ class _HomeState extends State<Home> {
       //here for the second one
     } else if (index == 1) {
       return Scaffold(
+        backgroundColor: _theme.getCurrentColor(),
         appBar: AppBar(
           title: Text(
             "Home",
-            style: _theme.getThemeData().textTheme.headline1,
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getCurrentColor())),
             textAlign: TextAlign.center,
           ),
         ),
@@ -44,11 +56,41 @@ class _HomeState extends State<Home> {
       //here for the last one
     } else if (index == 2) {
       return Scaffold(
+        backgroundColor: _theme.getCurrentColor(),
         appBar: AppBar(
           title: Text(
             "Settings",
-            style: _theme.getThemeData().textTheme.headline1,
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getCurrentColor())),
             textAlign: TextAlign.center,
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 90),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  color: Colors.transparent,
+                  child: Row(),
+                ),
+                StyledButton(
+                  text: "About",
+                  function: () {
+                    Navigator.pushNamed(context, About.id);
+                  },
+                ),
+                StyledButton(
+                  text: "Logout",
+                  function: () {},
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -64,33 +106,31 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var _theme = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      backgroundColor: _theme.getCurrentColor(),
       body: screensChanger(context, barIndex),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: _theme.getThemeData().accentColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        unselectedItemColor: _theme.getThemeData().hintColor,
+        unselectedItemColor: _theme.getCurrentColor(),
+        selectedItemColor: _theme.getThemeData().primaryColor,
+        iconSize: 28,
         items: [
           BottomNavigationBarItem(
             title: Text("Profile"),
             icon: Icon(
               ChatChat.user,
-              color: _theme.getCurrentColor(),
             ),
           ),
           BottomNavigationBarItem(
             title: Text("Home"),
             icon: Icon(
               ChatChat.house,
-              color: _theme.getCurrentColor(),
             ),
           ),
           BottomNavigationBarItem(
             title: Text("Settings"),
             icon: Icon(
               ChatChat.gear,
-              color: _theme.getCurrentColor(),
             ),
           ),
         ],

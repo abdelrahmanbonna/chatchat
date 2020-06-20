@@ -23,7 +23,11 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: Text(
           "Login",
-          style: _theme.getThemeData().textTheme.headline1,
+          style: _theme
+              .getThemeData()
+              .textTheme
+              .headline1
+              .merge(TextStyle(color: _theme.getCurrentColor())),
           textAlign: TextAlign.center,
         ),
       ),
@@ -38,7 +42,12 @@ class _LoginState extends State<Login> {
               SizedBox(
                 width: screen.width,
               ),
-              Image.asset("assets/Logo.png"),
+              Hero(
+                  tag: "logo",
+                  child: Image.asset(
+                    "assets/Logo.png",
+                    scale: 0.89,
+                  )),
               SizedBox(
                 height: screen.height * 0.1,
               ),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "41333039796",
+    "firebase_url": "https://chatchat-5e6e6.firebaseio.com",
+    "project_id": "chatchat-5e6e6",
+    "storage_bucket": "chatchat-5e6e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41333039796:android:2347baac23ab5684c66de1",
+        "android_client_info": {
+          "package_name": "com.absolutions.chatchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41333039796-smedrn8gs1i8rv5r9djvvtfm81bsg9co.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChubOjnuV0KT_z7Sh841DOP2TJbWJbEl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41333039796-smedrn8gs1i8rv5r9djvvtfm81bsg9co.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41333039796-eq6orqgf1hveinornhh8rm80t2rk0158.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.absolutions.chatchat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

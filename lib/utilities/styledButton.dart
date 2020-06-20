@@ -10,7 +10,7 @@ class StyledButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
-    var theme = Provider.of<ThemeChanger>(context).getThemeData();
+    var theme = Provider.of<ThemeChanger>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -18,7 +18,7 @@ class StyledButton extends StatelessWidget {
         height: screen.height * 0.07,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(19.0),
-          color: theme.accentColor,
+          color: theme.getThemeData().accentColor,
           boxShadow: [
             BoxShadow(
               color: const Color(0x29000000),
@@ -34,7 +34,11 @@ class StyledButton extends StatelessWidget {
           onPressed: function,
           child: Text(
             text == null ? "Empty Button" : text,
-            style: theme.textTheme.button,
+            style: theme
+                .getThemeData()
+                .textTheme
+                .button
+                .merge(TextStyle(color: theme.getCurrentColor())),
             textAlign: TextAlign.center,
           ),
         ),

@@ -54,7 +54,11 @@ class _RegisterState extends State<Register> {
       appBar: AppBar(
         title: Text(
           "Register",
-          style: _theme.getThemeData().textTheme.headline1,
+          style: _theme
+              .getThemeData()
+              .textTheme
+              .headline1
+              .merge(TextStyle(color: _theme.getCurrentColor())),
           textAlign: TextAlign.center,
         ),
       ),
