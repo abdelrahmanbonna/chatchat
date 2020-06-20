@@ -1,11 +1,49 @@
 import 'package:chatchat/logic/themeChanger.dart';
+import 'package:chatchat/screens/start.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   static String id = "register";
+
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  String name, phone;
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var _theme = Provider.of<ThemeChanger>(context);
+
+        return AlertDialog(
+          title: new Text(
+            "Registration is done",
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+          ),
+          content: new Text("Your account has been made please login"),
+          backgroundColor: _theme.getCurrentColor(),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, Start.id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +72,40 @@ class Register extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 minRadius: 110,
               ),
+              SizedBox(
+                width: screen.width,
+                height: screen.height * 0.05,
+              ),
               StyledField(
                 textLabel: "Name",
+                validate: (String value) {
+                  if (value.isEmpty || value.length > 30) {
+                    return "please enter a valid name (length of 1 to 30)";
+                  }
+                  return null;
+                },
+                onSave: (value) {
+                  name = value;
+                },
               ),
               StyledField(
                 textLabel: "Phone",
-                validate: (value) {
+                validate: (String value) {
                   if (value.isEmpty ||
                       RegExp("^(?:[+0]9)?[0-9]{10}\$").hasMatch(value)) {
                     return "please enter a valid number";
                   }
                   return null;
                 },
-                onSave: () {},
+                onSave: (value) {
+                  phone = value;
+                },
               ),
               StyledButton(
                 text: "Register",
-                function: () {},
+                function: () {
+                  _showDialog();
+                },
               ),
             ],
           ),

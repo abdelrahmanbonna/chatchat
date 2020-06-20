@@ -52,5 +52,6 @@ class ThemeChanger extends ChangeNotifier {
     mode == "dark"
         ? _currentColor = _themeData.primaryColorDark
         : _currentColor = _themeData.primaryColorLight;
+    notifyListeners();
   }
 }

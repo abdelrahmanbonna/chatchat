@@ -45,4 +45,6 @@ flutter:
         - asset: fonts/Lato-Regular.ttf
         - asset: fonts/Lato-Bold.ttf
         - asset: fonts/Lato-Black.ttf
-
+    - family:  ChatChat
+      fonts:
+       - asset: fonts/ChatChat.ttf
