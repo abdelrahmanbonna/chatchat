@@ -1,3 +1,5 @@
+import 'package:chatchat/logic/chatData.dart';
+import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/chat.dart';
 import 'package:chatchat/screens/home.dart';
@@ -20,7 +22,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialAppWithTheme(),
       providers: [
-        ChangeNotifierProvider.value(value: ThemeChanger()),
+        ChangeNotifierProvider.value(
+          value: ThemeChanger(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ChatData(),
+        ),
+        ChangeNotifierProvider.value(
+          value: UserData(),
+        ),
       ],
     );
   }
