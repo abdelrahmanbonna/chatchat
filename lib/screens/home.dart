@@ -53,6 +53,93 @@ class _HomeState extends State<Home> {
                 width: screen.width,
                 height: screen.height * 0.05,
               ),
+              Container(
+                width: 352.0,
+                height: 66.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33.0),
+                  color: _theme.getCurrentColor(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(-0x29000000),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Name:',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      width: screen.width * 0.04,
+                    ),
+                    Text(
+                      'Abdelrahman Bonna',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: screen.height * 0.02,
+              ),
+              Container(
+                width: 352.0,
+                height: 66.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33.0),
+                  color: _theme.getCurrentColor(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(-0x29000000),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Phone:',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      width: screen.width * 0.04,
+                    ),
+                    Text(
+                      '01102777726',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
