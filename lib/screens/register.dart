@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/start.dart';
@@ -22,7 +21,7 @@ class _RegisterState extends State<Register> {
   final picker = ImagePicker();
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       _image = File(
@@ -96,9 +95,12 @@ class _RegisterState extends State<Register> {
                 child: CircleAvatar(
                   backgroundColor: Colors.grey,
                   minRadius: 110,
-                  backgroundImage: _image == null
-                      ? null
-                      : FileImage(_image),
+                  maxRadius: 120,
+                  backgroundImage: _image == null ? null : FileImage(_image),
+                  child: Text(
+                    _image == null ? "Press here to add Picture" : "",
+                    style: _theme.getThemeData().textTheme.subtitle1,
+                  ),
                 ),
               ),
               SizedBox(
@@ -116,6 +118,7 @@ class _RegisterState extends State<Register> {
                 onSave: (value) {
                   name = value;
                 },
+                inputType: TextInputType.text,
               ),
               StyledField(
                 textLabel: "Phone",
@@ -129,6 +132,7 @@ class _RegisterState extends State<Register> {
                 onSave: (value) {
                   phone = value;
                 },
+                inputType: TextInputType.phone,
               ),
               StyledButton(
                 text: "Register",

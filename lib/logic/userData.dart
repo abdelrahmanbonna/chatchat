@@ -69,17 +69,19 @@ class UserData extends ChangeNotifier {
     );
   }
 
-  void registerUser(
+  Future<bool> registerUser(
       BuildContext context, String name, String phone, File pic) async {
     String verificationId, smsCode;
+    bool done;
 
     final PhoneVerificationFailed verifyFail = (AuthException exception) {
       //Todo what is done when verifying is failed
       _showDialogFail(context, exception.message.toString());
+      done = false;
     };
 
     final PhoneCodeSent smsCodeSent = (verId, [int forceResendToken]) {
-      //Todo what is done in the proccess of verifing the number
+      //Todo what is done in the process of verifying the number
       smsCode = _getVerifyCode(context);
       verificationId = verId;
     };
@@ -87,7 +89,8 @@ class UserData extends ChangeNotifier {
     final PhoneVerificationCompleted verifySuccess =
         (AuthCredential authCredential) {
       //Todo here is what done after phone is verified
-      print("Done User is Verfied.");
+      done = true;
+      print("Done User is Verified.");
     };
 
     final PhoneCodeAutoRetrievalTimeout timeout = (verId) {
@@ -101,6 +104,8 @@ class UserData extends ChangeNotifier {
         verificationFailed: verifyFail,
         codeSent: smsCodeSent,
         codeAutoRetrievalTimeout: timeout);
+
+    return done;
   }
 
   String _getVerifyCode(BuildContext context) {

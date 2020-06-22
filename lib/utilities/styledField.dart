@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 class StyledField extends StatelessWidget {
   final String textLabel;
   final Function validate, onSave;
+  final TextInputType inputType;
 
-  StyledField({this.textLabel, this.validate, this.onSave});
+  StyledField({this.textLabel, this.validate, this.onSave, this.inputType});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class StyledField extends StatelessWidget {
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelStyle: _theme.getThemeData().textTheme.bodyText2,
             hintStyle: _theme.getThemeData().textTheme.bodyText2),
+        keyboardType: inputType,
         validator: validate,
         onSaved: onSave,
       ),
