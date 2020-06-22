@@ -35,7 +35,7 @@ class ThemeChanger extends ChangeNotifier {
   );
 
   Color _currentColor;
-  bool _switchvalue = false;
+  bool _switchValue = false;
 
   ThemeChanger() {
     setCurrentColor();
@@ -50,15 +50,15 @@ class ThemeChanger extends ChangeNotifier {
   }
 
   setCurrentColor() {
-    _switchvalue
+    _switchValue
         ? _currentColor = _themeData.primaryColorDark
         : _currentColor = _themeData.primaryColorLight;
     notifyListeners();
   }
 
-  getSwitch() => _switchvalue;
+  getSwitch() => _switchValue;
   setSwitch(bool mode) {
-    _switchvalue = mode;
+    _switchValue = mode;
     notifyListeners();
   }
 }

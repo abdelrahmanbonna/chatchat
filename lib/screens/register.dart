@@ -13,7 +13,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String name, phone;
+  String name, phone, smsCode, verificationId;
 
   void _showDialog() {
     showDialog(

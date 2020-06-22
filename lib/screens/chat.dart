@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class Chat extends StatefulWidget {
   static String id = "chat";
+  static String userToken, receiverToken;
 
   @override
   _ChatState createState() => _ChatState();

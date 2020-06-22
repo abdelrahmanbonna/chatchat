@@ -4,12 +4,10 @@ class User {
   String _name;
   String _phone;
   String _pic;
-  bool _lastmode;
 
   String getName() => _name;
   String getPhone() => _phone;
   String getPic() => _pic;
-  bool getLastMode() => _lastmode;
 
   setName(String name) {
     _name = name;
@@ -21,9 +19,5 @@ class User {
 
   setPic(String pic) {
     _pic = pic;
-  }
-
-  setLastMode(bool mode) {
-    _lastmode = mode;
   }
 }

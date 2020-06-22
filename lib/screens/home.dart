@@ -1,4 +1,5 @@
 import 'package:chatchat/logic/themeChanger.dart';
+import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/newChat.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
@@ -17,11 +18,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int barIndex = 1;
-  bool switchval = false;
 
   Widget screensChanger(BuildContext context, int index) {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
+    var _user = Provider.of<UserData>(context);
 
     // if first option of the bar has been clicked
     if (index == 0) {
@@ -48,13 +49,15 @@ class _HomeState extends State<Home> {
               CircleAvatar(
                 backgroundColor: Colors.grey,
                 minRadius: 110,
+                maxRadius: 120,
+                backgroundImage: NetworkImage(_user.getPic(), scale: 5),
               ),
               SizedBox(
                 width: screen.width,
                 height: screen.height * 0.05,
               ),
               Container(
-                width: 352.0,
+                width: screen.width * 0.8,
                 height: 66.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(33.0),
@@ -83,7 +86,7 @@ class _HomeState extends State<Home> {
                       width: screen.width * 0.04,
                     ),
                     Text(
-                      'Abdelrahman Bonna',
+                      _user.getName(),
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 20,
@@ -99,7 +102,7 @@ class _HomeState extends State<Home> {
                 height: screen.height * 0.02,
               ),
               Container(
-                width: 352.0,
+                width: screen.width * 0.8,
                 height: 66.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(33.0),
@@ -128,7 +131,7 @@ class _HomeState extends State<Home> {
                       width: screen.width * 0.04,
                     ),
                     Text(
-                      '01102777726',
+                      _user.getPhone(),
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 20,
@@ -170,7 +173,12 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
           ),
         ),
-        body: Container(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            //TODO add StreamBuilder
+          ),
+        ),
       );
 
       //here for the last one
@@ -234,6 +242,7 @@ class _HomeState extends State<Home> {
                 StyledButton(
                   text: "Logout",
                   function: () {
+                    //TODO: add logout func
                     Navigator.pushNamedAndRemoveUntil(
                         context, Start.id, (route) => false);
                   },
