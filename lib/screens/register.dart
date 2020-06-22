@@ -1,7 +1,7 @@
 import 'dart:io';
+
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
-import 'package:chatchat/screens/start.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
 import 'package:flutter/material.dart';
@@ -28,36 +28,6 @@ class _RegisterState extends State<Register> {
         pickedFile.path,
       );
     });
-  }
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        var _theme = Provider.of<ThemeChanger>(context);
-
-        return AlertDialog(
-          title: new Text(
-            "Registration is done",
-            style: _theme
-                .getThemeData()
-                .textTheme
-                .headline1
-                .merge(TextStyle(color: _theme.getThemeData().hintColor)),
-          ),
-          content: new Text("Your account has been made please login"),
-          backgroundColor: _theme.getCurrentColor(),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("OK"),
-              onPressed: () {
-                Navigator.popAndPushNamed(context, Start.id);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -139,8 +109,6 @@ class _RegisterState extends State<Register> {
                 function: () {
                   //TODO remove comments
                   //_user.registerUser(context, name, phone,_image);
-                  //TODO find a solution to knowing whether the user is registered or not
-                  _showDialog();
                 },
               ),
             ],

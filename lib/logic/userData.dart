@@ -3,13 +3,18 @@ import 'dart:io';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/home.dart';
+import 'package:chatchat/screens/start.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserData extends ChangeNotifier {
   User _user;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseStorage _store = FirebaseStorage.instance;
+  Firestore _fire = Firestore.instance;
 
   UserData() {
     _user = User(id: "1");
@@ -37,6 +42,36 @@ class UserData extends ChangeNotifier {
   setPic(String pic) {
     _user.setPic(pic);
     notifyListeners();
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var _theme = Provider.of<ThemeChanger>(context);
+
+        return AlertDialog(
+          title: new Text(
+            "Registration is done",
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+          ),
+          content: new Text("Your account has been made please login"),
+          backgroundColor: _theme.getCurrentColor(),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, Start.id);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showDialogFail(BuildContext context, String msg) {
@@ -69,15 +104,12 @@ class UserData extends ChangeNotifier {
     );
   }
 
-  Future<bool> registerUser(
+  Future<void> registerUser(
       BuildContext context, String name, String phone, File pic) async {
     String verificationId, smsCode;
-    bool done;
 
     final PhoneVerificationFailed verifyFail = (AuthException exception) {
-      //Todo what is done when verifying is failed
       _showDialogFail(context, exception.message.toString());
-      done = false;
     };
 
     final PhoneCodeSent smsCodeSent = (verId, [int forceResendToken]) {
@@ -89,8 +121,11 @@ class UserData extends ChangeNotifier {
     final PhoneVerificationCompleted verifySuccess =
         (AuthCredential authCredential) {
       //Todo here is what done after phone is verified
-      done = true;
-      print("Done User is Verified.");
+      _auth.signInWithCredential(authCredential).then((AuthResult result) {
+        print("Done User is Verified.");
+
+        _showDialog(context);
+      });
     };
 
     final PhoneCodeAutoRetrievalTimeout timeout = (verId) {
@@ -104,8 +139,6 @@ class UserData extends ChangeNotifier {
         verificationFailed: verifyFail,
         codeSent: smsCodeSent,
         codeAutoRetrievalTimeout: timeout);
-
-    return done;
   }
 
   String _getVerifyCode(BuildContext context) {
@@ -149,7 +182,6 @@ class UserData extends ChangeNotifier {
     String verificationId, smsCode;
 
     final PhoneVerificationFailed verifyFail = (AuthException exception) {
-      //Todo what is done when verifying is failed
       _showDialogFail(context, exception.message.toString());
     };
 
@@ -162,11 +194,14 @@ class UserData extends ChangeNotifier {
     final PhoneVerificationCompleted verifySuccess =
         (AuthCredential authCredential) {
       //Todo here is what done after phone is verified
-      print("Done User is Verfied.");
-      setName("");
-      setPic("");
-      setPhone("");
-      Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
+      _auth.signInWithCredential(authCredential).then((AuthResult result) {
+        print("Done User is Verified.");
+        _user = User(id: result.user.uid);
+        setName(result.user.displayName);
+        setPic(result.user.photoUrl);
+        setPhone(result.user.phoneNumber);
+        Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
+      }); //Do the sign in ops
     };
 
     final PhoneCodeAutoRetrievalTimeout timeout = (verId) {
