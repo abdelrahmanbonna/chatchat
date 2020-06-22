@@ -176,7 +176,7 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10),
-            //TODO add StreamBuilder
+            //TODO add StreamBuilder of Chats
           ),
         ),
       );
@@ -242,7 +242,7 @@ class _HomeState extends State<Home> {
                 StyledButton(
                   text: "Logout",
                   function: () {
-                    //TODO: add logout func
+                    //Todo add this : _user.signOut();
                     Navigator.pushNamedAndRemoveUntil(
                         context, Start.id, (route) => false);
                   },

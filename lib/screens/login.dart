@@ -1,5 +1,5 @@
 import 'package:chatchat/logic/themeChanger.dart';
-import 'package:chatchat/screens/home.dart';
+import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
+    var _user = Provider.of<UserData>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -67,8 +68,8 @@ class _LoginState extends State<Login> {
               StyledButton(
                 text: "Login",
                 function: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, Home.id, (route) => false);
+                  //TODO remove comments
+                  //_user.signIn(phone, context);
                 },
               ),
             ],

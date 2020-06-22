@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 
 class StyledHomeChat extends StatelessWidget {
   final String picPath, name, lastmsg;
+  final Function func;
 
-  StyledHomeChat({this.name, this.lastmsg, this.picPath});
+  StyledHomeChat({this.name, this.lastmsg, this.picPath, this.func});
 
   @override
   Widget build(BuildContext context) {
@@ -20,44 +21,47 @@ class StyledHomeChat extends StatelessWidget {
         color: _theme.getCurrentColor(),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x4d000000),
+            color: const Color(-0x4d000000),
             blurRadius: 10,
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(picPath),
-            ),
-          ),
-          SizedBox(
-            width: screen.width * 0.07,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                name,
-                style: _theme
-                    .getThemeData()
-                    .textTheme
-                    .headline1
-                    .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+      child: FlatButton(
+        onPressed: func,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(picPath),
               ),
-              Text(
-                lastmsg,
-                style: _theme.getThemeData().textTheme.subtitle1,
-              )
-            ],
-          ),
-        ],
+            ),
+            SizedBox(
+              width: screen.width * 0.07,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  style: _theme
+                      .getThemeData()
+                      .textTheme
+                      .headline1
+                      .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+                ),
+                Text(
+                  lastmsg,
+                  style: _theme.getThemeData().textTheme.subtitle1,
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

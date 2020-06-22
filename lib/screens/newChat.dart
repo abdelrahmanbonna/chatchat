@@ -28,6 +28,11 @@ class _NewChatState extends State<NewChat> {
           textAlign: TextAlign.center,
         ),
       ),
+      body: SafeArea(
+          child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        //TODO add StreamBuilder of contacts
+      )),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chatchat/logic/themeChanger.dart';
+import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/start.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
@@ -49,6 +50,7 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
+    var _user = Provider.of<UserData>(context);
     return Scaffold(
       backgroundColor: _theme.getCurrentColor(),
       appBar: AppBar(
@@ -108,6 +110,9 @@ class _RegisterState extends State<Register> {
               StyledButton(
                 text: "Register",
                 function: () {
+                  //TODO remove comments
+                  //_user.registerUser(context, name, phone);
+                  //TODO find a solution to knowing whether the user is registered or not
                   _showDialog();
                 },
               ),
