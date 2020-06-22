@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/start.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
@@ -15,6 +18,18 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   String name, phone, smsCode, verificationId;
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = File(
+        pickedFile.path,
+      );
+    });
+  }
 
   void _showDialog() {
     showDialog(
@@ -74,9 +89,17 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 width: screen.width,
               ),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                minRadius: 110,
+              GestureDetector(
+                onTap: () {
+                  getImage();
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  minRadius: 110,
+                  backgroundImage: _image == null
+                      ? null
+                      : FileImage(_image),
+                ),
               ),
               SizedBox(
                 width: screen.width,
@@ -111,7 +134,7 @@ class _RegisterState extends State<Register> {
                 text: "Register",
                 function: () {
                   //TODO remove comments
-                  //_user.registerUser(context, name, phone);
+                  //_user.registerUser(context, name, phone,_image);
                   //TODO find a solution to knowing whether the user is registered or not
                   _showDialog();
                 },

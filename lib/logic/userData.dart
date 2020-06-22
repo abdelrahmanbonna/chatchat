@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/home.dart';
@@ -67,7 +69,8 @@ class UserData extends ChangeNotifier {
     );
   }
 
-  void registerUser(BuildContext context, String name, String phone) async {
+  void registerUser(
+      BuildContext context, String name, String phone, File pic) async {
     String verificationId, smsCode;
 
     final PhoneVerificationFailed verifyFail = (AuthException exception) {
