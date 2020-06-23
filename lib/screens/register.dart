@@ -16,7 +16,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String name, phone, smsCode, verificationId;
+  String name, phone, email, _pass;
   File _image;
   final picker = ImagePicker();
 
@@ -79,36 +79,41 @@ class _RegisterState extends State<Register> {
               ),
               StyledField(
                 textLabel: "Name",
-                validate: (String value) {
-                  if (value.isEmpty || value.length > 30) {
-                    return "please enter a valid name (length of 1 to 30)";
-                  }
-                  return null;
-                },
                 onSave: (value) {
                   name = value;
                 },
                 inputType: TextInputType.text,
+                secure: false,
               ),
               StyledField(
                 textLabel: "Phone",
-                validate: (String value) {
-                  if (value.isEmpty ||
-                      RegExp("^(?:[+0]9)?[0-9]{10}\$").hasMatch(value)) {
-                    return "please enter a valid number";
-                  }
-                  return null;
-                },
                 onSave: (value) {
                   phone = value;
                 },
                 inputType: TextInputType.phone,
+                secure: false,
+              ),
+              StyledField(
+                textLabel: "Email",
+                onSave: (value) {
+                  email = value;
+                },
+                inputType: TextInputType.emailAddress,
+                secure: false,
+              ),
+              StyledField(
+                textLabel: "Password",
+                onSave: (value) {
+                  _pass = value;
+                },
+                inputType: TextInputType.visiblePassword,
+                secure: true,
               ),
               StyledButton(
                 text: "Register",
                 function: () {
-                  //TODO remove comments
-                  //_user.registerUser(context, name, phone,_image);
+                  _user.registerUser(
+                      name, _pass, email, phone, _image, context);
                 },
               ),
             ],

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chatchat/logic/themeChanger.dart';
@@ -16,17 +17,12 @@ class UserData extends ChangeNotifier {
   FirebaseStorage _store = FirebaseStorage.instance;
   Firestore _fire = Firestore.instance;
 
-  UserData() {
-    _user = User(id: "1");
-    setName("Abdelrahman Bonna");
-    setPhone("+201102777726");
-    setPic(
-        "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.0-9/p960x960/67905530_2563448493679142_8641091737009258496_o.jpg?_nc_cat=110&_nc_sid=7aed08&_nc_eui2=AeEggl8YnRVcTab5VgZXWD8ojl-CSaBPdE2OX4JJoE90TfNRrPdqqM4lHnVXblsmcDf1yjbTEIvefZmOJvGyoOu8&_nc_ohc=NXbku4VLDzIAX-QbMJ-&_nc_ht=scontent-hbe1-1.xx&_nc_tp=6&oh=cd837684fed4255144fa4821bb03cec5&oe=5F15E16C");
-  }
+  UserData();
 
   String getName() => _user.getName();
   String getPhone() => _user.getPhone();
   String getPic() => _user.getPic();
+  String getEmail() => _user.getEmail();
   String getUserId() => _user.id;
 
   setName(String name) {
@@ -42,6 +38,50 @@ class UserData extends ChangeNotifier {
   setPic(String pic) {
     _user.setPic(pic);
     notifyListeners();
+  }
+
+  setEmail(String email) {
+    _user.setEmail(email);
+    notifyListeners();
+  }
+
+  logout() {
+    _auth.signOut();
+    _user = User(id: "0");
+    notifyListeners();
+  }
+
+  Future uploadFile(File _image, String id) async {
+    StorageReference storageReference =
+        _store.ref().child('profilepics/$id.jpg');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+  }
+
+  registerUser(String name, String password, String email, String phone,
+      File pic, BuildContext context) async {
+    var user;
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.currentUser().then((value) async {
+        uploadFile(pic, value.uid);
+        user = value;
+      });
+
+      await _fire.collection('users').add({
+        'name': name.toString(),
+        'phone': phone.toString(),
+        'picUrl':
+            "gs://chatchat-5e6e6.appspot.com/profilepics/${user.uid.toString()}.jpg",
+        'uid': user.uid.toString(),
+      });
+      await _auth.signOut();
+      _showDialog(context);
+    } on Exception catch (e) {
+      _showDialogFail(context, e);
+    }
   }
 
   void _showDialog(BuildContext context) {
@@ -74,7 +114,7 @@ class UserData extends ChangeNotifier {
     );
   }
 
-  void _showDialogFail(BuildContext context, String msg) {
+  void _showDialogFail(BuildContext context, e) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -82,20 +122,20 @@ class UserData extends ChangeNotifier {
 
         return AlertDialog(
           title: new Text(
-            "Registration is failed",
+            "Registration is Failed",
             style: _theme
                 .getThemeData()
                 .textTheme
                 .headline1
                 .merge(TextStyle(color: _theme.getThemeData().hintColor)),
           ),
-          content: new Text("$msg\nPlease Try again later"),
+          content: new Text("$e"),
           backgroundColor: _theme.getCurrentColor(),
           actions: <Widget>[
             new FlatButton(
               child: new Text("OK"),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, Start.id);
               },
             ),
           ],
@@ -104,125 +144,23 @@ class UserData extends ChangeNotifier {
     );
   }
 
-  Future<void> registerUser(
-      BuildContext context, String name, String phone, File pic) async {
-    String verificationId, smsCode;
+  login(String email, String password, BuildContext context) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
+    await _auth.currentUser().then((value) async {
+      var users = await _fire.collection('users').getDocuments();
+      for (var doc in users.documents) {
+        if (doc.data.containsValue(value.uid.toString())) {
+          Map<dynamic, dynamic> map =
+              json.decode(doc.data.toString()) as Map<String, dynamic>;
+          _user = User(id: map['uid'].toString());
+          setEmail(map['email'].toString());
+          setName(map['name'].toString());
+          setPic(map['picUrl'].toString());
+          setPhone(map['phone'].toString());
+        }
+      }
 
-    final PhoneVerificationFailed verifyFail = (AuthException exception) {
-      _showDialogFail(context, exception.message.toString());
-    };
-
-    final PhoneCodeSent smsCodeSent = (verId, [int forceResendToken]) {
-      //Todo what is done in the process of verifying the number
-      smsCode = _getVerifyCode(context);
-      verificationId = verId;
-    };
-
-    final PhoneVerificationCompleted verifySuccess =
-        (AuthCredential authCredential) {
-      //Todo here is what done after phone is verified
-      _auth.signInWithCredential(authCredential).then((AuthResult result) {
-        print("Done User is Verified.");
-
-        _showDialog(context);
-      });
-    };
-
-    final PhoneCodeAutoRetrievalTimeout timeout = (verId) {
-      verificationId = verId;
-    };
-
-    await _auth.verifyPhoneNumber(
-        phoneNumber: phone,
-        timeout: Duration(seconds: 60),
-        verificationCompleted: verifySuccess,
-        verificationFailed: verifyFail,
-        codeSent: smsCodeSent,
-        codeAutoRetrievalTimeout: timeout);
-  }
-
-  String _getVerifyCode(BuildContext context) {
-    String input = "";
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        var _theme = Provider.of<ThemeChanger>(context);
-        return AlertDialog(
-          title: new Text(
-            "Enter the sms code",
-            style: _theme
-                .getThemeData()
-                .textTheme
-                .headline1
-                .merge(TextStyle(color: _theme.getThemeData().hintColor)),
-          ),
-          content: new TextField(
-            onChanged: (value) {
-              input = value;
-            },
-          ),
-          backgroundColor: _theme.getCurrentColor(),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("Done"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-    return input;
-  }
-
-  void signIn(String phone, BuildContext context) async {
-    String verificationId, smsCode;
-
-    final PhoneVerificationFailed verifyFail = (AuthException exception) {
-      _showDialogFail(context, exception.message.toString());
-    };
-
-    final PhoneCodeSent smsCodeSent = (verId, [int forceResendToken]) {
-      //Todo what is done in the proccess of verifing the number
-      smsCode = _getVerifyCode(context);
-      verificationId = verId;
-    };
-
-    final PhoneVerificationCompleted verifySuccess =
-        (AuthCredential authCredential) {
-      //Todo here is what done after phone is verified
-      _auth.signInWithCredential(authCredential).then((AuthResult result) {
-        print("Done User is Verified.");
-        _user = User(id: result.user.uid);
-        setName(result.user.displayName);
-        setPic(result.user.photoUrl);
-        setPhone(result.user.phoneNumber);
-        Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
-      }); //Do the sign in ops
-    };
-
-    final PhoneCodeAutoRetrievalTimeout timeout = (verId) {
-      verificationId = verId;
-    };
-
-    await _auth.verifyPhoneNumber(
-        phoneNumber: phone,
-        timeout: Duration(seconds: 60),
-        verificationCompleted: verifySuccess,
-        verificationFailed: verifyFail,
-        codeSent: smsCodeSent,
-        codeAutoRetrievalTimeout: timeout);
-  }
-
-  void signOut() {
-    _auth.signOut();
-    _user = User(id: "");
-    setName("");
-    setPic("");
-    setPhone("");
-    notifyListeners();
+      Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
+    });
   }
 }

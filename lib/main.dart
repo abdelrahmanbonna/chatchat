@@ -2,6 +2,7 @@ import 'package:chatchat/logic/chatData.dart';
 import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/chat.dart';
+import 'package:chatchat/screens/forgetpass.dart';
 import 'package:chatchat/screens/home.dart';
 import 'package:chatchat/screens/login.dart';
 import 'package:chatchat/screens/newChat.dart';
@@ -51,6 +52,7 @@ class MaterialAppWithTheme extends StatelessWidget {
         About.id: (context) => About(),
         Chat.id: (context) => Chat(),
         NewChat.id: (context) => NewChat(),
+        ForgetPass.id: (context) => ForgetPass(),
       },
       initialRoute: Start.id,
       theme: _theme.getThemeData(),

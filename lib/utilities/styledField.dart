@@ -4,10 +4,11 @@ import 'package:provider/provider.dart';
 
 class StyledField extends StatelessWidget {
   final String textLabel;
-  final Function validate, onSave;
+  final Function onSave;
   final TextInputType inputType;
+  final bool secure;
 
-  StyledField({this.textLabel, this.validate, this.onSave, this.inputType});
+  StyledField({this.textLabel, this.onSave, this.inputType, this.secure});
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,8 @@ class StyledField extends StatelessWidget {
             labelStyle: _theme.getThemeData().textTheme.bodyText2,
             hintStyle: _theme.getThemeData().textTheme.bodyText2),
         keyboardType: inputType,
-        validator: validate,
-        onSaved: onSave,
+        onChanged: onSave,
+        obscureText: secure,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
+import 'package:chatchat/screens/forgetpass.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:chatchat/utilities/styledField.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String phone;
+  String email, _pass;
 
   @override
   Widget build(BuildContext context) {
@@ -53,23 +54,34 @@ class _LoginState extends State<Login> {
                 height: screen.height * 0.1,
               ),
               StyledField(
-                textLabel: "Phone",
-                validate: (String value) {
-                  if (value.isEmpty ||
-                      RegExp("^(?:[+0]9)?[0-9]{10}\$").hasMatch(value)) {
-                    return "please enter a valid number";
-                  }
-                  return null;
-                },
+                textLabel: "Email",
                 onSave: (String value) {
-                  phone = value;
+                  email = value;
                 },
+                secure: false,
+                inputType: TextInputType.emailAddress,
               ),
+              StyledField(
+                textLabel: "Password",
+                onSave: (String value) {
+                  _pass = value;
+                },
+                inputType: TextInputType.visiblePassword,
+                secure: true,
+              ),
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, ForgetPass.id);
+                  },
+                  child: Text(
+                    "Forgot password",
+                    style: _theme.getThemeData().textTheme.subtitle1,
+                  )),
               StyledButton(
                 text: "Login",
-                function: () {
-                  //TODO remove comments
-                  //_user.signIn(phone, context);
+                function: () async {
+                  //TODO add login func
+                  _user.login(email, _pass, context);
                 },
               ),
             ],

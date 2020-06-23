@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                 backgroundColor: Colors.grey,
                 minRadius: 110,
                 maxRadius: 120,
-                backgroundImage: NetworkImage(_user.getPic(), scale: 5),
+                backgroundImage: null,
               ),
               SizedBox(
                 width: screen.width,
@@ -135,6 +135,51 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: screen.height * 0.02,
+              ),
+              Container(
+                width: screen.width * 0.8,
+                height: 66.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33.0),
+                  color: _theme.getCurrentColor(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(-0x29000000),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Email:',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 16,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      width: screen.width * 0.04,
+                    ),
+                    Text(
+                      _user.getEmail(),
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 16,
                         color: const Color(0xff8983cb),
                         fontWeight: FontWeight.w900,
                       ),
@@ -242,7 +287,7 @@ class _HomeState extends State<Home> {
                 StyledButton(
                   text: "Logout",
                   function: () {
-                    //Todo add this : _user.signOut();
+                    _user.logout();
                     Navigator.pushNamedAndRemoveUntil(
                         context, Start.id, (route) => false);
                   },
