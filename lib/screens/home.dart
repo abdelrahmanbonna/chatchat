@@ -1,7 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:chatchat/logic/chatData.dart';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
+import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/about.dart';
+import 'package:chatchat/screens/chat.dart';
 import 'package:chatchat/screens/newChat.dart';
+import 'package:chatchat/utilities/cardItem.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:firebase_image/firebase_image.dart';
@@ -24,6 +29,7 @@ class _HomeState extends State<Home> {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
     var _user = Provider.of<UserData>(context);
+    var _chat = Provider.of<ChatData>(context);
 
     // if first option of the bar has been clicked
     if (index == 0) {
@@ -52,13 +58,9 @@ class _HomeState extends State<Home> {
                 minRadius: 110,
                 maxRadius: 120,
                 backgroundImage: FirebaseImage(_user.getPic(),
-                    shouldCache:
-                        true, // The image should be cached (default: True)
-                    maxSizeBytes:
-                        10000 * 1000, // 3MB max file size (default: 2.5MB)
-                    cacheRefreshStrategy:
-                        CacheRefreshStrategy.NEVER // Switch off update checking
-                    ),
+                    shouldCache: true,
+                    maxSizeBytes: 10000 * 1000,
+                    cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
               ),
               SizedBox(
                 width: screen.width,
@@ -80,7 +82,7 @@ class _HomeState extends State<Home> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    AutoSizeText(
                       'Name:',
                       style: TextStyle(
                         fontFamily: 'Lato',
@@ -93,7 +95,7 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       width: screen.width * 0.04,
                     ),
-                    Text(
+                    AutoSizeText(
                       _user.getName(),
                       style: TextStyle(
                         fontFamily: 'Lato',
@@ -125,7 +127,7 @@ class _HomeState extends State<Home> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    AutoSizeText(
                       'Phone:',
                       style: TextStyle(
                         fontFamily: 'Lato',
@@ -138,7 +140,7 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       width: screen.width * 0.04,
                     ),
-                    Text(
+                    AutoSizeText(
                       _user.getPhone(),
                       style: TextStyle(
                         fontFamily: 'Lato',
@@ -154,48 +156,47 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: screen.height * 0.02,
               ),
-              Expanded(
-                child: Container(
-                  width: screen.width * 0.8,
-                  height: 66.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33.0),
-                    color: _theme.getCurrentColor(),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(-0x29000000),
-                        blurRadius: 9,
+              Container(
+                width: screen.width * 0.8,
+                height: 66.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33.0),
+                  color: _theme.getCurrentColor(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(-0x29000000),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AutoSizeText(
+                      'Email:',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 20,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Email:',
-                        style: TextStyle(
-                          fontFamily: 'Lato',
-                          fontSize: 20,
-                          color: const Color(0xff8983cb),
-                          fontWeight: FontWeight.w900,
-                        ),
-                        textAlign: TextAlign.left,
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      width: screen.width * 0.04,
+                    ),
+                    AutoSizeText(
+                      _user.getEmail(),
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: screen.width * 0.016,
+                        color: const Color(0xff8983cb),
+                        fontWeight: FontWeight.w900,
                       ),
-                      SizedBox(
-                        width: screen.width * 0.04,
-                      ),
-                      Text(
-                        _user.getEmail(),
-                        style: TextStyle(
-                          fontFamily: 'Lato',
-                          fontSize: 20,
-                          color: const Color(0xff8983cb),
-                          fontWeight: FontWeight.w900,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -231,7 +232,22 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10),
-            //TODO add StreamBuilder of Chats
+            child: AnimatedList(
+              itemBuilder: (context, index, animation) {
+                _chat.fillReceiversList(_user.getUserId());
+                User item = _chat.getListOfReceivers(index);
+                return CardItem(
+                  animation: animation,
+                  pic: item.getPic(),
+                  name: item.getName(),
+                  onTap: () {
+                    _chat.setReceiver(item.id, item.getName(), item.getPic());
+                    Navigator.pushNamed(context, Chat.id);
+                  },
+                );
+              },
+              initialItemCount: _chat.getItemsCountFromListOfReceivers(),
+            ),
           ),
         ),
       );
@@ -355,5 +371,10 @@ class _HomeState extends State<Home> {
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

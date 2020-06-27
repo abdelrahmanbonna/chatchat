@@ -15,15 +15,15 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^0.1.3
   provider: ^4.1.3
-  font_awesome_flutter: ^8.8.1
+  auto_size_text: ^2.1.0
   firebase_core: ^0.4.5
   cloud_firestore: ^0.13.6
   firebase_auth: ^0.16.1
   firebase_storage: ^3.1.6
   url_launcher: ^5.4.2
-  permission_handler: ^5.0.1
   image_picker: ^0.6.7+2
   firebase_image: ^0.1.6
+  modal_progress_hud: ^0.1.3
 
 dev_dependencies:
   flutter_test:

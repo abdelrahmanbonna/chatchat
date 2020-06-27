@@ -7,10 +7,10 @@ import 'package:provider/provider.dart';
 
 class ForgetPass extends StatelessWidget {
   static String id = "forget";
-  String email;
 
   @override
   Widget build(BuildContext context) {
+    String email;
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
     var _user = Provider.of<UserData>(context);
