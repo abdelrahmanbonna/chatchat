@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:chatchat/logic/themeChanger.dart';
@@ -58,25 +57,32 @@ class UserData extends ChangeNotifier {
     await uploadTask.onComplete;
   }
 
-  registerUser(String name, String password, String email, String phone,
-      File pic, BuildContext context) async {
-    var user;
+  registerUser(
+    String name,
+    String password,
+    String email,
+    String phone,
+    File pic,
+    BuildContext context,
+  ) async {
+    // var user;
     try {
       await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      await _auth.currentUser().then((value) async {
-        uploadFile(pic, value.uid);
-        user = value;
-      });
-
-      await _fire.collection('users').add({
+      var user = await _auth.currentUser();
+      uploadFile(pic, user.uid);
+      await _fire.collection('users').document(user.uid).setData({
+        'id': user.uid,
+        'email': user.email,
         'name': name.toString(),
         'phone': phone.toString(),
         'picUrl':
             "gs://chatchat-5e6e6.appspot.com/profilepics/${user.uid.toString()}.jpg",
-        'uid': user.uid.toString(),
       });
+
       await _auth.signOut();
       _showDialog(context);
     } on Exception catch (e) {
@@ -146,19 +152,18 @@ class UserData extends ChangeNotifier {
 
   login(String email, String password, BuildContext context) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
-    await _auth.currentUser().then((value) async {
-      var users = await _fire.collection('users').getDocuments();
-      for (var doc in users.documents) {
-        if (doc.data.containsValue(value.uid.toString())) {
-          Map<dynamic, dynamic> map =
-              json.decode(doc.data.toString()) as Map<String, dynamic>;
-          _user = User(id: map['uid'].toString());
-          setEmail(map['email'].toString());
-          setName(map['name'].toString());
-          setPic(map['picUrl'].toString());
-          setPhone(map['phone'].toString());
-        }
-      }
+    await _auth.currentUser().then((user) async {
+      var userData = await _fire.collection('users').document(user.uid).get();
+
+      _user = User(id: userData.data['id']);
+
+      setEmail(userData.data['email']);
+
+      setName(userData.data['name']);
+
+      setPic(userData.data['picUrl']);
+
+      setPhone(userData.data['phone']);
 
       Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
     });

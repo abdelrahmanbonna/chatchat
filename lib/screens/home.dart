@@ -4,6 +4,7 @@ import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/newChat.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:chatchat/utilities/styledButton.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,14 @@ class _HomeState extends State<Home> {
                 backgroundColor: Colors.grey,
                 minRadius: 110,
                 maxRadius: 120,
-                backgroundImage: null,
+                backgroundImage: FirebaseImage(_user.getPic(),
+                    shouldCache:
+                        true, // The image should be cached (default: True)
+                    maxSizeBytes:
+                        10000 * 1000, // 3MB max file size (default: 2.5MB)
+                    cacheRefreshStrategy:
+                        CacheRefreshStrategy.NEVER // Switch off update checking
+                    ),
               ),
               SizedBox(
                 width: screen.width,
@@ -146,46 +154,48 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: screen.height * 0.02,
               ),
-              Container(
-                width: screen.width * 0.8,
-                height: 66.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(33.0),
-                  color: _theme.getCurrentColor(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(-0x29000000),
-                      blurRadius: 9,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Email:',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 16,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+              Expanded(
+                child: Container(
+                  width: screen.width * 0.8,
+                  height: 66.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33.0),
+                    color: _theme.getCurrentColor(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(-0x29000000),
+                        blurRadius: 9,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(
-                      width: screen.width * 0.04,
-                    ),
-                    Text(
-                      _user.getEmail(),
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 16,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Email:',
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+                      SizedBox(
+                        width: screen.width * 0.04,
+                      ),
+                      Text(
+                        _user.getEmail(),
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
