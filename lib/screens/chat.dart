@@ -15,7 +15,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   String msg = '';
-  TextEditingController chatField;
+
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
@@ -24,12 +24,14 @@ class _ChatState extends State<Chat> {
     var _chat = Provider.of<ChatData>(context);
 
     return Scaffold(
+      backgroundColor: _theme.getCurrentColor(),
       appBar: AppBar(
         actions: [
           IconButton(
               icon: Icon(
                 ChatChat.phone,
                 color: _theme.getCurrentColor(),
+                size: 250,
               ),
               onPressed: () {
                 //TODO start voice call
@@ -55,7 +57,7 @@ class _ChatState extends State<Chat> {
                   : _chat.getReceiverName(),
               style: _theme.getThemeData().textTheme.headline1.merge(TextStyle(
                     color: _theme.getCurrentColor(),
-                    fontSize: 12,
+                    fontSize: 14,
                   )),
               textAlign: TextAlign.center,
             ),
@@ -67,49 +69,81 @@ class _ChatState extends State<Chat> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: screen.width,
-              //TODO add stream of messages
-              child: null,
-            ),
-            Container(
-              width: screen.width * 0.8,
-              height: screen.height * 0.1,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black, blurRadius: 10, spreadRadius: 3),
-                ],
-                color: _theme.getThemeData().hintColor,
+            Expanded(
+              child: Container(
+                //TODO add stream of messages
+                child: null,
               ),
-              child: Row(
-                children: [
-                  Container(
-                    width: screen.width * 0.4,
-                    child: TextField(
-                      onChanged: (value) {
-                        msg = value;
-                      },
-                      autocorrect: true,
-                      keyboardType: TextInputType.text,
-                      controller: chatField,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Container(
+                alignment: Alignment.center,
+                width: screen.width * 0.9,
+                height: screen.height * 0.07,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33.0),
+                  color: _theme.getThemeData().hintColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(-0x29000000),
+                      blurRadius: 9,
                     ),
-                  ),
-                  IconButton(
-                      icon: Icon(
-                        ChatChat.paper_plane,
-                        size: 3,
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: screen.width * 0.01,
+                    ),
+                    Container(
+                      width: screen.width * 0.6,
+                      child: TextField(
+                        style:
+                            _theme.getThemeData().textTheme.subtitle1.copyWith(
+                                  color: _theme.getCurrentColor(),
+                                ),
+                        decoration: InputDecoration(
+                          fillColor: _theme.getCurrentColor(),
+                          hoverColor: _theme.getCurrentColor(),
+                          hintText: "Enter a message..",
+                          hintStyle: _theme
+                              .getThemeData()
+                              .textTheme
+                              .subtitle1
+                              .copyWith(
+                                color: _theme.getCurrentColor(),
+                              ),
+                        ),
+                        onChanged: (value) {
+                          msg = value;
+                        },
+                        autocorrect: true,
+                        keyboardType: TextInputType.text,
                       ),
-                      onPressed: () {
-                        _chat.sendChatMessage(
-                            _user.getUserId(), _chat.getReceiverId(), msg);
-                        chatField.clear();
-                      }),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                    IconButton(
+                        alignment: Alignment.center,
+                        icon: Icon(
+                          ChatChat.paper_plane,
+                          size: 35,
+                          color: _theme.getCurrentColor(),
+                        ),
+                        onPressed: () {
+                          _chat.sendChatMessage(
+                              _user.getUserId(), _chat.getReceiverId(), msg);
+                          setState(() {
+                            msg = "";
+                          });
+                        }),
+                    SizedBox(
+                      width: screen.width * 0.01,
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
               ),
             ),
           ],

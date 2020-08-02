@@ -2,17 +2,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chatchat/logic/chatData.dart';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
-import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/newChat.dart';
-import 'package:chatchat/utilities/cardItem.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:chatchat/utilities/styledButton.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'chat.dart';
 import 'start.dart';
 
 class Home extends StatefulWidget {
@@ -29,6 +27,7 @@ class _HomeState extends State<Home> {
     var screen = MediaQuery.of(context).size;
     var _theme = Provider.of<ThemeChanger>(context);
     var _user = Provider.of<UserData>(context);
+    var _fire = Firestore.instance;
     var _chat = Provider.of<ChatData>(context);
 
     // if first option of the bar has been clicked
@@ -233,23 +232,8 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: Container(
-            //TODO Chats
-            child: AnimatedList(
-              itemBuilder: (context, index, animation) {
-                User item = _chat.getListOfReceivers(
-                    index); //get the current receiver and fill the card
-                return CardItem(
-                  animation: animation,
-                  pic: item.getPic(),
-                  name: item.getName(),
-                  onTap: () {
-                    _chat.setReceiver(item.id, item.getName(), item.getPic());
-                    Navigator.pushNamed(context, Chat.id);
-                  },
-                );
-              },
-              initialItemCount: _chat.getItemsCountFromListOfReceivers(),
-            ),
+            //TODO show chats currently have messages
+          //  child: StreamBuilder<QuerySnapshot>(),
           ),
         ),
       );
@@ -339,9 +323,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var _theme = Provider.of<ThemeChanger>(context);
-    var _user = Provider.of<UserData>(context);
-    var _chat = Provider.of<ChatData>(context);
-    _chat.fillReceiversList(_user.getUserId()); //fill the receivers list
 
     return Scaffold(
       body: screensChanger(context, barIndex),
