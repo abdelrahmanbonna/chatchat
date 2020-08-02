@@ -38,51 +38,47 @@ class _NewChatState extends State<NewChat> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          //TODO add StreamBuilder of contacts
-          child: Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _fire.collection("users").snapshots(),
-              builder: (context, snapshot) {
-                List<User> list = [];
-                if (snapshot == null) {
-                  return ModalProgressHUD(
-                    inAsyncCall: true,
-                    child: Container(
-                      color: _theme.getCurrentColor(),
-                      width: screen.width,
-                    ),
-                  );
-                } else {
-                  var users = snapshot.data.documents;
-                  for (var user in users) {
-                    var userID = user.data['id'].toString();
-                    var userName = user.data['name'].toString();
-                    var userPic = user.data['picUrl'].toString();
-                    var otherUser = User(id: userID);
-                    otherUser.setName(userName);
-                    otherUser.setPic(userPic);
-                    list.add(otherUser);
-                  }
-                  return AnimatedList(
-                    itemBuilder: (context, index, animation) {
-                      return CardItem(
-                        animation: animation,
-                        pic: list[index].getPic(),
-                        name: list[index].getName(),
-                        onTap: () {
-                          _chat.setReceiver(list[index].id,
-                              list[index].getName(), list[index].getPic());
-                          Navigator.pushNamed(context, Chat.id);
-                        },
-                      );
-                    },
-                    initialItemCount: list.length,
-                  );
+        child: Container(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _fire.collection("users").snapshots(),
+            builder: (context, snapshot) {
+              List<User> list = [];
+              if (snapshot == null) {
+                return ModalProgressHUD(
+                  inAsyncCall: true,
+                  child: Container(
+                    color: _theme.getCurrentColor(),
+                    width: screen.width,
+                  ),
+                );
+              } else {
+                var users = snapshot.data.documents;
+                for (var user in users) {
+                  var userID = user.data['id'].toString();
+                  var userName = user.data['name'].toString();
+                  var userPic = user.data['picUrl'].toString();
+                  var otherUser = User(id: userID);
+                  otherUser.setName(userName);
+                  otherUser.setPic(userPic);
+                  list.add(otherUser);
                 }
-              },
-            ),
+                return AnimatedList(
+                  itemBuilder: (context, index, animation) {
+                    return CardItem(
+                      animation: animation,
+                      pic: list[index].getPic(),
+                      name: list[index].getName(),
+                      onTap: () {
+                        _chat.setReceiver(list[index].id, list[index].getName(),
+                            list[index].getPic());
+                        Navigator.pushNamed(context, Chat.id);
+                      },
+                    );
+                  },
+                  initialItemCount: list.length,
+                );
+              }
+            },
           ),
         ),
       ),

@@ -232,26 +232,23 @@ class _HomeState extends State<Home> {
           ),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Container(
-              //TODO Chats
-              child: AnimatedList(
-                itemBuilder: (context, index, animation) {
-                  _chat.fillReceiversList(_user.getUserId());
-                  User item = _chat.getListOfReceivers(index);
-                  return CardItem(
-                    animation: animation,
-                    pic: item.getPic(),
-                    name: item.getName(),
-                    onTap: () {
-                      _chat.setReceiver(item.id, item.getName(), item.getPic());
-                      Navigator.pushNamed(context, Chat.id);
-                    },
-                  );
-                },
-                initialItemCount: _chat.getItemsCountFromListOfReceivers(),
-              ),
+          child: Container(
+            //TODO Chats
+            child: AnimatedList(
+              itemBuilder: (context, index, animation) {
+                User item = _chat.getListOfReceivers(
+                    index); //get the current receiver and fill the card
+                return CardItem(
+                  animation: animation,
+                  pic: item.getPic(),
+                  name: item.getName(),
+                  onTap: () {
+                    _chat.setReceiver(item.id, item.getName(), item.getPic());
+                    Navigator.pushNamed(context, Chat.id);
+                  },
+                );
+              },
+              initialItemCount: _chat.getItemsCountFromListOfReceivers(),
             ),
           ),
         ),
@@ -342,6 +339,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var _theme = Provider.of<ThemeChanger>(context);
+    var _user = Provider.of<UserData>(context);
+    var _chat = Provider.of<ChatData>(context);
+    _chat.fillReceiversList(_user.getUserId()); //fill the receivers list
+
     return Scaffold(
       body: screensChanger(context, barIndex),
       bottomNavigationBar: BottomNavigationBar(
