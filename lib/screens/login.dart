@@ -40,9 +40,9 @@ class _LoginState extends State<Login> {
         inAsyncCall: loading,
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 80),
+            padding: EdgeInsets.symmetric(vertical: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
                       Navigator.pushNamed(context, ForgetPass.id);
                     },
                     child: Text(
-                      "Forgot password",
+                      "Forgot password?",
                       style: _theme.getThemeData().textTheme.subtitle1,
                     )),
                 StyledButton(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/home.dart';
+import 'package:chatchat/screens/login.dart';
 import 'package:chatchat/screens/start.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -151,7 +152,37 @@ class UserData extends ChangeNotifier {
   }
 
   login(String email, String password, BuildContext context) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .catchError((e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          var _theme = Provider.of<ThemeChanger>(context);
+
+          return AlertDialog(
+            title: new Text(
+              "Login is Failed",
+              style: _theme
+                  .getThemeData()
+                  .textTheme
+                  .headline1
+                  .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+            ),
+            content: new Text("$e"),
+            backgroundColor: _theme.getCurrentColor(),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("OK"),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, Login.id);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
     await _auth.currentUser().then((user) async {
       var userData = await _fire.collection('users').document(user.uid).get();
 
@@ -167,5 +198,37 @@ class UserData extends ChangeNotifier {
 
       Navigator.pushNamedAndRemoveUntil(context, Home.id, (route) => false);
     });
+  }
+
+  forgetPass(String email, context) {
+    _auth.sendPasswordResetEmail(email: email);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var _theme = Provider.of<ThemeChanger>(context);
+
+        return AlertDialog(
+          title: new Text(
+            "Done",
+            style: _theme
+                .getThemeData()
+                .textTheme
+                .headline1
+                .merge(TextStyle(color: _theme.getThemeData().hintColor)),
+          ),
+          content:
+              new Text("Email has been sent. You will receive it shortly."),
+          backgroundColor: _theme.getCurrentColor(),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, Start.id);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

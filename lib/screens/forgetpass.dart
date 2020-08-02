@@ -54,7 +54,7 @@ class ForgetPass extends StatelessWidget {
               StyledButton(
                 text: "Submit",
                 function: () {
-                  //TODO add forget pass
+                  _user.forgetPass(email, context);
                 },
               )
             ],

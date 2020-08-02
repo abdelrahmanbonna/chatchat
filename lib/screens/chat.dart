@@ -40,6 +40,11 @@ class _ChatState extends State<Chat> {
           textAlign: TextAlign.center,
         ),
       ),
+      body: SafeArea(
+        child: Column(
+          children: [],
+        ),
+      ),
     );
   }
 }

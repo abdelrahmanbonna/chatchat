@@ -4,7 +4,6 @@ import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/about.dart';
-import 'package:chatchat/screens/chat.dart';
 import 'package:chatchat/screens/newChat.dart';
 import 'package:chatchat/utilities/cardItem.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
@@ -13,6 +12,7 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'chat.dart';
 import 'start.dart';
 
 class Home extends StatefulWidget {
@@ -47,159 +47,161 @@ class _HomeState extends State<Home> {
           ),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 70),
-          child: Column(
-            children: [
-              SizedBox(
-                width: screen.width,
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                minRadius: 110,
-                maxRadius: 120,
-                backgroundImage: FirebaseImage(_user.getPic(),
-                    shouldCache: true,
-                    maxSizeBytes: 10000 * 1000,
-                    cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
-              ),
-              SizedBox(
-                width: screen.width,
-                height: screen.height * 0.05,
-              ),
-              Container(
-                width: screen.width * 0.8,
-                height: 66.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(33.0),
-                  color: _theme.getCurrentColor(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(-0x29000000),
-                      blurRadius: 9,
-                    ),
-                  ],
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  width: screen.width,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      'Name:',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 20,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(
-                      width: screen.width * 0.04,
-                    ),
-                    AutoSizeText(
-                      _user.getName(),
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 20,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+                CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  minRadius: 110,
+                  maxRadius: 120,
+                  backgroundImage: FirebaseImage(_user.getPic(),
+                      shouldCache: true,
+                      maxSizeBytes: 10000 * 1000,
+                      cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
                 ),
-              ),
-              SizedBox(
-                height: screen.height * 0.02,
-              ),
-              Container(
-                width: screen.width * 0.8,
-                height: 66.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(33.0),
-                  color: _theme.getCurrentColor(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(-0x29000000),
-                      blurRadius: 9,
-                    ),
-                  ],
+                SizedBox(
+                  width: screen.width,
+                  height: screen.height * 0.05,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      'Phone:',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 20,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+                Container(
+                  width: screen.width * 0.8,
+                  height: 66.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33.0),
+                    color: _theme.getCurrentColor(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(-0x29000000),
+                        blurRadius: 9,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(
-                      width: screen.width * 0.04,
-                    ),
-                    AutoSizeText(
-                      _user.getPhone(),
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 20,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        'Name:',
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+                      SizedBox(
+                        width: screen.width * 0.04,
+                      ),
+                      AutoSizeText(
+                        _user.getName(),
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: screen.height * 0.02,
-              ),
-              Container(
-                width: screen.width * 0.8,
-                height: 66.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(33.0),
-                  color: _theme.getCurrentColor(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(-0x29000000),
-                      blurRadius: 9,
-                    ),
-                  ],
+                SizedBox(
+                  height: screen.height * 0.02,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      'Email:',
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 20,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+                Container(
+                  width: screen.width * 0.8,
+                  height: 66.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33.0),
+                    color: _theme.getCurrentColor(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(-0x29000000),
+                        blurRadius: 9,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(
-                      width: screen.width * 0.04,
-                    ),
-                    AutoSizeText(
-                      _user.getEmail(),
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: screen.width * 0.016,
-                        color: const Color(0xff8983cb),
-                        fontWeight: FontWeight.w900,
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        'Phone:',
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      maxLines: 2,
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+                      SizedBox(
+                        width: screen.width * 0.04,
+                      ),
+                      AutoSizeText(
+                        _user.getPhone(),
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: screen.height * 0.02,
+                ),
+                Container(
+                  width: screen.width * 0.8,
+                  height: 66.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33.0),
+                    color: _theme.getCurrentColor(),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(-0x29000000),
+                        blurRadius: 9,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        'Email:',
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 20,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(
+                        width: screen.width * 0.04,
+                      ),
+                      AutoSizeText(
+                        _user.getEmail(),
+                        style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: screen.width * 0.016,
+                          color: const Color(0xff8983cb),
+                          fontWeight: FontWeight.w900,
+                        ),
+                        maxLines: 2,
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -232,21 +234,24 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: AnimatedList(
-              itemBuilder: (context, index, animation) {
-                _chat.fillReceiversList(_user.getUserId());
-                User item = _chat.getListOfReceivers(index);
-                return CardItem(
-                  animation: animation,
-                  pic: item.getPic(),
-                  name: item.getName(),
-                  onTap: () {
-                    _chat.setReceiver(item.id, item.getName(), item.getPic());
-                    Navigator.pushNamed(context, Chat.id);
-                  },
-                );
-              },
-              initialItemCount: _chat.getItemsCountFromListOfReceivers(),
+            child: Container(
+              //TODO Chats
+              child: AnimatedList(
+                itemBuilder: (context, index, animation) {
+                  _chat.fillReceiversList(_user.getUserId());
+                  User item = _chat.getListOfReceivers(index);
+                  return CardItem(
+                    animation: animation,
+                    pic: item.getPic(),
+                    name: item.getName(),
+                    onTap: () {
+                      _chat.setReceiver(item.id, item.getName(), item.getPic());
+                      Navigator.pushNamed(context, Chat.id);
+                    },
+                  );
+                },
+                initialItemCount: _chat.getItemsCountFromListOfReceivers(),
+              ),
             ),
           ),
         ),
@@ -270,55 +275,58 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 120),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      Text(
-                        "Dark Mode",
-                        style: _theme.getThemeData().textTheme.button.merge(
-                            TextStyle(color: _theme.getThemeData().hintColor)),
-                      ),
-                      SizedBox(
-                        width: screen.width * 0.1,
-                      ),
-                      Switch(
-                        value: _theme.getSwitch(),
-                        inactiveThumbColor: _theme.getThemeData().hintColor,
-                        activeColor: _theme.getThemeData().hintColor,
-                        activeTrackColor: _theme.getThemeData().hintColor,
-                        onChanged: (value) {
-                          _theme.setSwitch(value);
-                          _theme.setCurrentColor();
-                        },
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.transparent,
+                    child: Row(
+                      children: [
+                        Text(
+                          "Dark Mode",
+                          style: _theme.getThemeData().textTheme.button.merge(
+                              TextStyle(
+                                  color: _theme.getThemeData().hintColor)),
+                        ),
+                        SizedBox(
+                          width: screen.width * 0.1,
+                        ),
+                        Switch(
+                          value: _theme.getSwitch(),
+                          inactiveThumbColor: _theme.getThemeData().hintColor,
+                          activeColor: _theme.getThemeData().hintColor,
+                          activeTrackColor: _theme.getThemeData().hintColor,
+                          onChanged: (value) {
+                            _theme.setSwitch(value);
+                            _theme.setCurrentColor();
+                          },
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: screen.height * 0.1,
-                ),
-                StyledButton(
-                  text: "About",
-                  function: () {
-                    Navigator.pushNamed(context, About.id);
-                  },
-                ),
-                StyledButton(
-                  text: "Logout",
-                  function: () {
-                    _user.logout();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, Start.id, (route) => false);
-                  },
-                ),
-              ],
+                  SizedBox(
+                    height: screen.height * 0.1,
+                  ),
+                  StyledButton(
+                    text: "About",
+                    function: () {
+                      Navigator.pushNamed(context, About.id);
+                    },
+                  ),
+                  StyledButton(
+                    text: "Logout",
+                    function: () {
+                      _user.logout();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Start.id, (route) => false);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
