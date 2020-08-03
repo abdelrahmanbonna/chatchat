@@ -17,6 +17,7 @@ class NewChat extends StatefulWidget {
 }
 
 class _NewChatState extends State<NewChat> {
+  List<User> list = [];
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
@@ -42,8 +43,7 @@ class _NewChatState extends State<NewChat> {
           child: StreamBuilder<QuerySnapshot>(
             stream: _fire.collection("users").snapshots(),
             builder: (context, snapshot) {
-              List<User> list = [];
-              if (snapshot == null) {
+              if (snapshot.data == null || !snapshot.hasData || snapshot.connectionState != ConnectionState.active) {
                 return ModalProgressHUD(
                   inAsyncCall: true,
                   child: Container(

@@ -4,7 +4,6 @@ import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/utilities/chatMessage.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
@@ -43,17 +42,8 @@ class _ChatState extends State<Chat> {
         ],
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey,
-              minRadius: 10,
-              maxRadius: 18,
-              backgroundImage: FirebaseImage(_user.getPic(),
-                  shouldCache: true,
-                  maxSizeBytes: 10000 * 1000,
-                  cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
-            ),
             SizedBox(
-              width: screen.width * 0.01,
+              width: screen.width * 0.02,
             ),
             Text(
               _chat.getReceiverName() == null
@@ -61,7 +51,7 @@ class _ChatState extends State<Chat> {
                   : _chat.getReceiverName(),
               style: _theme.getThemeData().textTheme.headline1.merge(TextStyle(
                     color: _theme.getCurrentColor(),
-                    fontSize: 14,
+                    fontSize: 16,
                   )),
               textAlign: TextAlign.center,
             ),
@@ -81,7 +71,9 @@ class _ChatState extends State<Chat> {
                   stream: _fire.collection('chat').snapshots(),
                   builder: (context, snapshot) {
                     List<Widget> list = [];
-                    if (!snapshot.hasData) {
+                    if (!snapshot.hasData ||
+                        snapshot.data == null ||
+                        snapshot.connectionState != ConnectionState.active) {
                       return ModalProgressHUD(
                           inAsyncCall: true,
                           child: Container(
@@ -200,9 +192,6 @@ class _ChatState extends State<Chat> {
                         onPressed: () {
                           _chat.sendChatMessage(
                               _user.getUserId(), _chat.getReceiverId(), msg);
-                          setState(() {
-                            msg = "";
-                          });
                         }),
                     SizedBox(
                       width: screen.width * 0.01,
