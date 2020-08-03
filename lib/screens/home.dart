@@ -232,9 +232,9 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: Container(
-            //TODO show chats currently have messages
-          //  child: StreamBuilder<QuerySnapshot>(),
-          ),
+              //TODO show chats currently have messages
+              //  child: StreamBuilder<QuerySnapshot>(),
+              ),
         ),
       );
 

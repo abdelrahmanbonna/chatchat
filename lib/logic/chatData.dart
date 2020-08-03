@@ -19,15 +19,76 @@ class ChatData extends ChangeNotifier {
 
   // send chat message to firebase to send it to the receiver
   sendChatMessage(
-      String currentUserToken, String receiverUserToken, String message) {
-    _fire
-        .collection("chat-$currentUserToken-$receiverUserToken")
-        .document("${DateTime.now().toIso8601String()}")
-        .setData({
-      'message': message,
-      'sender': currentUserToken,
-      'receiver': receiverUserToken,
-      'datetime': DateTime.now().toIso8601String(),
-    });
+      String currentUserToken, String receiverUserToken, String message) async {
+    if (await _fire
+            .collection("chat")
+            .document("$currentUserToken-$receiverUserToken")
+            .get() ==
+        null) {
+      if (await _fire
+              .collection("chat")
+              .document("$receiverUserToken-$currentUserToken")
+              .get() ==
+          null) {
+        _fire
+            .collection("chat")
+            .document("$currentUserToken-$receiverUserToken")
+            .setData({
+          'messages': [
+            {
+              "message": message,
+              'datetime': DateTime.now().toIso8601String(),
+              'sender': currentUserToken,
+            }
+          ],
+          'sender': currentUserToken,
+          'receiver': receiverUserToken,
+        });
+      } else {
+        var oldData = await _fire
+            .collection("chat")
+            .document("$receiverUserToken-$currentUserToken")
+            .get();
+        List list1 = oldData.data['messages'];
+        List list2 = [
+          {
+            "message": message,
+            'datetime': DateTime.now().toIso8601String(),
+            'sender': currentUserToken,
+          }
+        ];
+
+        var newList = [...list1, ...list2].toSet().toList();
+        _fire
+            .collection("chat")
+            .document("$receiverUserToken-$currentUserToken")
+            .updateData({
+          'messages': newList,
+        });
+      }
+    } else {
+      var oldData = await _fire
+          .collection("chat")
+          .document("$currentUserToken-$receiverUserToken")
+          .get();
+
+      List list1 = oldData.data['messages'];
+      List list2 = [
+        {
+          "message": message,
+          'datetime': DateTime.now().toIso8601String(),
+          'sender': currentUserToken,
+        }
+      ];
+
+      var newList = [...list1, ...list2].toSet().toList();
+
+      _fire
+          .collection("chat")
+          .document("$currentUserToken-$receiverUserToken")
+          .updateData({
+        'messages': newList,
+      });
+    }
   }
 }

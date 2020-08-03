@@ -1,9 +1,12 @@
 import 'package:chatchat/logic/chatData.dart';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
+import 'package:chatchat/utilities/chatMessage.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
 class Chat extends StatefulWidget {
@@ -15,6 +18,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   String msg = '';
+  Firestore _fire = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +75,72 @@ class _ChatState extends State<Chat> {
           children: [
             Expanded(
               child: Container(
+                width: screen.width,
                 //TODO add stream of messages
-                child: null,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _fire.collection('chat').snapshots(),
+                  builder: (context, snapshot) {
+                    List<Widget> list = [];
+                    if (!snapshot.hasData) {
+                      return ModalProgressHUD(
+                          inAsyncCall: true,
+                          child: Container(
+                            color: _theme.getCurrentColor(),
+                          ));
+                    } else {
+                      var chats = snapshot.data.documents;
+                      for (var chatf in chats) {
+                        if (chatf.documentID ==
+                            "${_user.getUserId()}-${_chat.getReceiverId()}") {
+                          var messages = chatf.data['messages'];
+                          for (var msg in messages) {
+                            if (msg['sender'].toString() == _user.getUserId()) {
+                              list.add(ChatMessage(
+                                senderOrReceiver: true,
+                                message: msg['message'].toString(),
+                                dateTimeStamp: msg['datetime'].toString(),
+                                sender: _user.getName(),
+                              ));
+                            } else {
+                              list.add(ChatMessage(
+                                senderOrReceiver: false,
+                                message: msg['message'].toString(),
+                                dateTimeStamp: msg['datetime'].toString(),
+                                sender: _chat.getReceiverName(),
+                              ));
+                            }
+                          }
+                        } else if (chatf.documentID ==
+                            "${_chat.getReceiverId()}-${_user.getUserId()}") {
+                          var messages = chatf.data['messages'];
+                          for (var msg in messages) {
+                            if (msg['sender'].toString() == _user.getUserId()) {
+                              list.add(ChatMessage(
+                                senderOrReceiver: true,
+                                message: msg['message'].toString(),
+                                dateTimeStamp: msg['datetime'].toString(),
+                                sender: _user.getName(),
+                              ));
+                            } else {
+                              list.add(ChatMessage(
+                                senderOrReceiver: false,
+                                message: msg['message'].toString(),
+                                dateTimeStamp: msg['datetime'].toString(),
+                                sender: _chat.getReceiverName(),
+                              ));
+                            }
+                          }
+                        }
+                      }
+
+                      return Column(
+                        children: list,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      );
+                    }
+                  },
+                ),
               ),
             ),
             Padding(
@@ -81,7 +149,6 @@ class _ChatState extends State<Chat> {
                 alignment: Alignment.center,
                 width: screen.width * 0.9,
                 height: screen.height * 0.07,
-                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(33.0),
                   color: _theme.getThemeData().hintColor,
