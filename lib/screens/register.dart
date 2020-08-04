@@ -102,7 +102,7 @@ class _RegisterState extends State<Register> {
                   onSave: (value) {
                     email = value;
                   },
-                  inputType: TextInputType.emailAddress,
+                  inputType: TextInputType.text,
                   secure: false,
                 ),
                 StyledField(

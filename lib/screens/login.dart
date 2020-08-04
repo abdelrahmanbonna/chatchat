@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
                     email = value;
                   },
                   secure: false,
-                  inputType: TextInputType.emailAddress,
+                  inputType: null,
                 ),
                 StyledField(
                   textLabel: "Password",

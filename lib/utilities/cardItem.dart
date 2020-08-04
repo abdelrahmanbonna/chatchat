@@ -45,17 +45,20 @@ class CardItem extends StatelessWidget {
               child: Center(
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      minRadius: 20,
-                      maxRadius: 20,
-                      backgroundImage: FirebaseImage(pic,
-                          shouldCache: true,
-                          maxSizeBytes: 10000 * 1000,
-                          cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        minRadius: 25,
+                        maxRadius: 25,
+                        backgroundImage: FirebaseImage(pic,
+                            shouldCache: true,
+                            maxSizeBytes: 10000 * 1000,
+                            cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
+                      ),
                     ),
                     SizedBox(
-                      width: screen.width * 0.01,
+                      width: screen.width * 0.05,
                     ),
                     Text('$name', style: textStyle),
                   ],

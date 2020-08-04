@@ -14,6 +14,7 @@ class ChatData extends ChangeNotifier {
   setReceiver(String token, String name, String pic) {
     _receiver = User(id: token);
     _receiver.setName(name);
+    _receiver.setPic(pic);
     notifyListeners();
   }
 

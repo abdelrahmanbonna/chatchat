@@ -4,6 +4,7 @@ import 'package:chatchat/logic/userData.dart';
 import 'package:chatchat/utilities/chatMessage.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   String msg = '';
   Firestore _fire = Firestore.instance;
+  var control = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +31,31 @@ class _ChatState extends State<Chat> {
     return Scaffold(
       backgroundColor: _theme.getCurrentColor(),
       appBar: AppBar(
-        actions: [
-          IconButton(
-              icon: Icon(
-                ChatChat.phone,
-                color: _theme.getCurrentColor(),
-                size: 250,
-              ),
-              onPressed: () {
-                //TODO start voice call
-              })
-        ],
+//        actions: [
+//          IconButton(
+//              icon: Icon(
+//                ChatChat.phone,
+//                color: _theme.getCurrentColor(),
+//                size: 250,
+//              ),
+//              onPressed: () {
+//                //TODO start voice call
+//              })
+//        ],
         title: Row(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey,
+                minRadius: 18,
+                maxRadius: 18,
+                backgroundImage: FirebaseImage(_chat.getReceiverPic(),
+                    shouldCache: true,
+                    maxSizeBytes: 10000 * 1000,
+                    cacheRefreshStrategy: CacheRefreshStrategy.NEVER),
+              ),
+            ),
             SizedBox(
               width: screen.width * 0.02,
             ),
@@ -93,7 +107,11 @@ class _ChatState extends State<Chat> {
                                   child: ChatMessage(
                                     senderOrReceiver: true,
                                     message: msg['message'].toString(),
-                                    dateTimeStamp: msg['datetime'].toString(),
+                                    dateTimeStamp:
+                                        DateTime.fromMicrosecondsSinceEpoch(
+                                                msg['datetime'])
+                                            .toLocal()
+                                            .toString(),
                                     sender: _user.getName(),
                                   ),
                                 ),
@@ -148,10 +166,12 @@ class _ChatState extends State<Chat> {
                         }
                       }
 
-                      return Column(
-                        children: list,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: list,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                        ),
                       );
                     }
                   },
@@ -198,6 +218,8 @@ class _ChatState extends State<Chat> {
                                 color: _theme.getCurrentColor(),
                               ),
                         ),
+                        controller: control,
+                        enableSuggestions: true,
                         onChanged: (value) {
                           msg = value;
                         },
@@ -214,9 +236,7 @@ class _ChatState extends State<Chat> {
                         ),
                         onPressed: () {
                           _chat.sendChatMessage(_user.getUserId(), msg);
-                          setState(() {
-                            msg = "";
-                          });
+                          control.clear();
                         }),
                     SizedBox(
                       width: screen.width * 0.01,
