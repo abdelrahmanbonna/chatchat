@@ -2,15 +2,19 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chatchat/logic/chatData.dart';
 import 'package:chatchat/logic/themeChanger.dart';
 import 'package:chatchat/logic/userData.dart';
+import 'package:chatchat/models/user.dart';
 import 'package:chatchat/screens/about.dart';
 import 'package:chatchat/screens/newChat.dart';
+import 'package:chatchat/utilities/cardItem.dart';
 import 'package:chatchat/utilities/chat_chat_icons.dart';
 import 'package:chatchat/utilities/styledButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
+import 'chat.dart';
 import 'start.dart';
 
 class Home extends StatefulWidget {
@@ -232,9 +236,171 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: Container(
-              //TODO show chats currently have messages
-              //  child: StreamBuilder<QuerySnapshot>(),
-              ),
+            // show chats currently have messages
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _fire.collection('chat').snapshots(),
+              // ignore: missing_return
+              builder: (context, snapshot) {
+                if (!snapshot.hasData ||
+                    snapshot.connectionState != ConnectionState.active ||
+                    snapshot.data == null) {
+                  return ModalProgressHUD(
+                    inAsyncCall: true,
+                    child: Container(
+                      color: _theme.getCurrentColor(),
+                    ),
+                  );
+                } else {
+                  List<User> list = [];
+                  var chats = snapshot.data.documents;
+                  for (var chat in chats) {
+                    if (chat.data['sender'].toString() == _user.getUserId()) {
+                      var wantedUsr = chat.data['receiver'].toString();
+                      return StreamBuilder<QuerySnapshot>(
+                          stream: _fire.collection('users').snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot == null) {
+                              return ModalProgressHUD(
+                                inAsyncCall: true,
+                                child: Container(
+                                  color: _theme.getCurrentColor(),
+                                ),
+                              );
+                            } else {
+                              var usrs = snapshot.data.documents;
+                              for (var usr in usrs) {
+                                if (wantedUsr == usr.data["id"].toString()) {
+                                  var otherUser =
+                                      User(id: usr.data["id"].toString());
+                                  otherUser
+                                      .setName(usr.data["name"].toString());
+                                  otherUser
+                                      .setPic(usr.data["picUrl"].toString());
+                                  list.add(otherUser);
+                                }
+                              }
+                              return AnimatedList(
+                                itemBuilder: (context, index, animation) {
+                                  if (list.length == 0) {
+                                    return Container(
+                                      width: screen.width,
+                                      height: screen.height * 0.5,
+                                      color: _theme.getCurrentColor(),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "No Messages yet.",
+                                        style: _theme
+                                            .getThemeData()
+                                            .textTheme
+                                            .headline1
+                                            .copyWith(
+                                                color: _theme
+                                                    .getThemeData()
+                                                    .hintColor),
+                                      ),
+                                    );
+                                  } else {
+                                    return CardItem(
+                                      animation: animation,
+                                      onTap: () {
+                                        _chat.setReceiver(
+                                            list[index].id,
+                                            list[index].getName(),
+                                            list[index].getPic());
+                                        Navigator.pushNamed(context, Chat.id);
+                                      },
+                                      onHold: () {
+                                        //TODO add remove func
+//                                        setState(() {
+//                                          list.removeAt(index);
+//                                        });
+                                      },
+                                      name: list[index].getName(),
+                                      pic: list[index].getPic(),
+                                    );
+                                  }
+                                },
+                                initialItemCount: list.length,
+                              );
+                            }
+                          });
+                    } else if (chat.data['receiver'].toString() ==
+                        _user.getUserId()) {
+                      var wantedUsr = chat.data['sender'].toString();
+                      return StreamBuilder<QuerySnapshot>(
+                          stream: _fire.collection('users').snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot == null) {
+                              return ModalProgressHUD(
+                                inAsyncCall: true,
+                                child: Container(
+                                  color: _theme.getCurrentColor(),
+                                ),
+                              );
+                            } else {
+                              var usrs = snapshot.data.documents;
+                              for (var usr in usrs) {
+                                if (wantedUsr == usr.data["id"].toString()) {
+                                  var otherUser =
+                                      User(id: usr.data["id"].toString());
+                                  otherUser
+                                      .setName(usr.data["name"].toString());
+                                  otherUser
+                                      .setPic(usr.data["picUrl"].toString());
+                                  list.add(otherUser);
+                                }
+                              }
+                              return AnimatedList(
+                                itemBuilder: (context, index, animation) {
+                                  if (list.length == 0) {
+                                    return Container(
+                                      width: screen.width,
+                                      height: screen.height * 0.5,
+                                      color: _theme.getCurrentColor(),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "No Messages yet.",
+                                        style: _theme
+                                            .getThemeData()
+                                            .textTheme
+                                            .headline1
+                                            .copyWith(
+                                                color: _theme
+                                                    .getThemeData()
+                                                    .hintColor),
+                                      ),
+                                    );
+                                  } else {
+                                    return CardItem(
+                                      animation: animation,
+                                      onHold: () {
+                                        //TODO add remove func
+//                                        setState(() {
+//                                          list.removeAt(index);
+//                                        });
+                                      },
+                                      onTap: () {
+                                        _chat.setReceiver(
+                                            list[index].id,
+                                            list[index].getName(),
+                                            list[index].getPic());
+                                        Navigator.pushNamed(context, Chat.id);
+                                      },
+                                      name: list[index].getName(),
+                                      pic: list[index].getPic(),
+                                    );
+                                  }
+                                },
+                                initialItemCount: list.length,
+                              );
+                            }
+                          });
+                    }
+                  }
+                }
+              },
+            ),
+          ),
         ),
       );
 

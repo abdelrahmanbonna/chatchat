@@ -8,13 +8,14 @@ class CardItem extends StatelessWidget {
       {Key key,
       @required this.animation,
       @required this.onTap,
+      @required this.onHold,
       @required this.name,
       @required this.pic})
       : assert(animation != null),
         super(key: key);
 
   final Animation<double> animation;
-  final VoidCallback onTap;
+  final VoidCallback onTap, onHold;
   final String name;
   final String pic;
 
@@ -36,6 +37,7 @@ class CardItem extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
+          onLongPress: onHold,
           child: SizedBox(
             height: 80.0,
             child: Card(

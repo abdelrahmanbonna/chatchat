@@ -43,7 +43,9 @@ class _NewChatState extends State<NewChat> {
           child: StreamBuilder<QuerySnapshot>(
             stream: _fire.collection("users").snapshots(),
             builder: (context, snapshot) {
-              if (snapshot.data == null || !snapshot.hasData || snapshot.connectionState != ConnectionState.active) {
+              if (snapshot.data == null ||
+                  !snapshot.hasData ||
+                  snapshot.connectionState != ConnectionState.active) {
                 return ModalProgressHUD(
                   inAsyncCall: true,
                   child: Container(
@@ -65,6 +67,7 @@ class _NewChatState extends State<NewChat> {
                 return AnimatedList(
                   itemBuilder: (context, index, animation) {
                     return CardItem(
+                      onHold: () {},
                       animation: animation,
                       pic: list[index].getPic(),
                       name: list[index].getName(),

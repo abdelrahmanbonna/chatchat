@@ -214,6 +214,9 @@ class _ChatState extends State<Chat> {
                         ),
                         onPressed: () {
                           _chat.sendChatMessage(_user.getUserId(), msg);
+                          setState(() {
+                            msg = "";
+                          });
                         }),
                     SizedBox(
                       width: screen.width * 0.01,
