@@ -36,10 +36,21 @@ class ChatMessage extends StatelessWidget {
                     bottomRight: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
-            elevation: 5.0,
+            elevation: 10.0,
             color: senderOrReceiver
                 ? _theme.getThemeData().primaryColor
                 : _theme.getThemeData().accentColor,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Text(
+                message,
+                style: _theme
+                    .getThemeData()
+                    .textTheme
+                    .subtitle1
+                    .copyWith(color: _theme.getCurrentColor()),
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),

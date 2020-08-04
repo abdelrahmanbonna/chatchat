@@ -66,7 +66,6 @@ class _ChatState extends State<Chat> {
             Expanded(
               child: Container(
                 width: screen.width,
-                //TODO add stream of messages
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _fire.collection('chat').snapshots(),
                   builder: (context, snapshot) {
@@ -87,19 +86,31 @@ class _ChatState extends State<Chat> {
                           var messages = chatf.data['messages'];
                           for (var msg in messages) {
                             if (msg['sender'].toString() == _user.getUserId()) {
-                              list.add(ChatMessage(
-                                senderOrReceiver: true,
-                                message: msg['message'].toString(),
-                                dateTimeStamp: msg['datetime'].toString(),
-                                sender: _user.getName(),
-                              ));
+                              list.add(
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: ChatMessage(
+                                    senderOrReceiver: true,
+                                    message: msg['message'].toString(),
+                                    dateTimeStamp: msg['datetime'].toString(),
+                                    sender: _user.getName(),
+                                  ),
+                                ),
+                              );
                             } else {
-                              list.add(ChatMessage(
-                                senderOrReceiver: false,
-                                message: msg['message'].toString(),
-                                dateTimeStamp: msg['datetime'].toString(),
-                                sender: _chat.getReceiverName(),
-                              ));
+                              list.add(
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: ChatMessage(
+                                    senderOrReceiver: false,
+                                    message: msg['message'].toString(),
+                                    dateTimeStamp: msg['datetime'].toString(),
+                                    sender: _chat.getReceiverName(),
+                                  ),
+                                ),
+                              );
                             }
                           }
                         } else if (chatf.documentID ==
@@ -107,19 +118,31 @@ class _ChatState extends State<Chat> {
                           var messages = chatf.data['messages'];
                           for (var msg in messages) {
                             if (msg['sender'].toString() == _user.getUserId()) {
-                              list.add(ChatMessage(
-                                senderOrReceiver: true,
-                                message: msg['message'].toString(),
-                                dateTimeStamp: msg['datetime'].toString(),
-                                sender: _user.getName(),
-                              ));
+                              list.add(
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: ChatMessage(
+                                    senderOrReceiver: true,
+                                    message: msg['message'].toString(),
+                                    dateTimeStamp: msg['datetime'].toString(),
+                                    sender: _user.getName(),
+                                  ),
+                                ),
+                              );
                             } else {
-                              list.add(ChatMessage(
-                                senderOrReceiver: false,
-                                message: msg['message'].toString(),
-                                dateTimeStamp: msg['datetime'].toString(),
-                                sender: _chat.getReceiverName(),
-                              ));
+                              list.add(
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: ChatMessage(
+                                    senderOrReceiver: false,
+                                    message: msg['message'].toString(),
+                                    dateTimeStamp: msg['datetime'].toString(),
+                                    sender: _chat.getReceiverName(),
+                                  ),
+                                ),
+                              );
                             }
                           }
                         }
@@ -190,8 +213,7 @@ class _ChatState extends State<Chat> {
                           color: _theme.getCurrentColor(),
                         ),
                         onPressed: () {
-                          _chat.sendChatMessage(
-                              _user.getUserId(), _chat.getReceiverId(), msg);
+                          _chat.sendChatMessage(_user.getUserId(), msg);
                         }),
                     SizedBox(
                       width: screen.width * 0.01,
