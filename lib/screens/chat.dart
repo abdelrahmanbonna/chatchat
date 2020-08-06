@@ -107,11 +107,7 @@ class _ChatState extends State<Chat> {
                                   child: ChatMessage(
                                     senderOrReceiver: true,
                                     message: msg['message'].toString(),
-                                    dateTimeStamp:
-                                        DateTime.fromMicrosecondsSinceEpoch(
-                                                msg['datetime'])
-                                            .toLocal()
-                                            .toString(),
+                                    dateTimeStamp: msg['datetime'].toString(),
                                     sender: _user.getName(),
                                   ),
                                 ),

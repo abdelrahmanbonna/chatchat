@@ -1,6 +1,7 @@
 import 'package:chatchat/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatData extends ChangeNotifier {
   Firestore _fire = Firestore.instance;
@@ -21,6 +22,8 @@ class ChatData extends ChangeNotifier {
   // send chat message to firebase to send it to the receiver
   sendChatMessage(currentUserToken, String message) async {
     bool done = false;
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     await _fire
         .collection('chat')
         .document("$currentUserToken-${_receiver.id}")
@@ -35,7 +38,7 @@ class ChatData extends ChangeNotifier {
               [
                 {
                   "message": message,
-                  'datetime': DateTime.now().toIso8601String(),
+                  'datetime': formattedDate,
                   'sender': currentUserToken,
                 }
               ]
@@ -57,7 +60,7 @@ class ChatData extends ChangeNotifier {
               [
                 {
                   "message": message,
-                  'datetime': DateTime.now().toIso8601String(),
+                  'datetime': formattedDate,
                   'sender': currentUserToken,
                 }
               ]
@@ -73,7 +76,7 @@ class ChatData extends ChangeNotifier {
         'messages': [
           {
             "message": message,
-            'datetime': DateTime.now().toIso8601String(),
+            'datetime': formattedDate,
             'sender': currentUserToken,
           }
         ],
