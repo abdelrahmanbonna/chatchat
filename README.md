@@ -16,14 +16,14 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 ## Current Features
--- Chatting in private.
--- uploading a profile picture and every user has a profile.
--- Darkmode in all app screens.
--- Providers are used to manage user operations and chat operations.
+- Chatting in private.
+- uploading a profile picture and every user has a profile.
+- Darkmode in all app screens.
+- Providers are used to manage user operations and chat operations.
 
 ## Future Work
--- Adding notifications.
--- Adding chat groups.
--- Delete chats from home.
--- Adding voice calls.
--- Edits ti user profile.
+- Adding notifications.
+- Adding chat groups.
+- Delete chats from home.
+- Adding voice calls.
+- Edits ti user profile.
