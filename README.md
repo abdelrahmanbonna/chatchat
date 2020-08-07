@@ -26,4 +26,4 @@ samples, guidance on mobile development, and a full API reference.
 - Adding chat groups.
 - Delete chats from home.
 - Adding voice calls.
-- Edits ti user profile.
+- Edits to user profile.
